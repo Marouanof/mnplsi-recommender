@@ -1,0 +1,147 @@
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+*.venv
+
+# Données brutes et volumineux
+data/*.csv
+data/*.tar.gz
+data/checkpoint/
+data/**/*.csv
+
+# Modèles et artefacts
+*.joblib
+*.pkl
+*.parquet
+*.model
+spark_jobs/user_factors.joblib
+spark_jobs/item_factors.joblib
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE & Editeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.prettierrc
+.editorconfig
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Logs
+*.log
+logs/
+airflow/logs/
+airflow-logs/
+*.log.*
+debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+.env.local
+
+# Sensitive data & secrets
+.env
+.env.local
+.env.*.local
+*.secrets
+credentials.json
+config.local.yml
+api_key.txt
+password.txt
+
+# Build & Compilation
+dist/
+build/
+*.egg-info/
+
+# Node (si frontend npm)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Spark & Hadoop
+spark-warehouse/
+metastore_db/
+*.parquet
+checkpoint-*/
+
+# Airflow
+airflow/airflow.cfg
+airflow/airflow.db
+airflow/unittests.cfg
+airflow-webserver.pid
+
+# Compiled Python files
+*.cpython-39.pyc
+*.cpython-310.pyc
+*.cpython-311.pyc
+
+# IDE Settings
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/workspace.xml
+.idea/misc.xml
+
+# Temporary files
+*.tmp
+*.temp
+.~*
+
+# Backup files
+*.bak
+*.backup
+*.swp
+
+# OS & Editor files
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# Documentation generated
+site/
+docs/_build/
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Database
+*.db
+*.sqlite
+*.sqlite3

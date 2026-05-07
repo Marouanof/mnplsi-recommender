@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MNPLSI — Système de recommandation temps réel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-wrap">
+      <div class="navbar-brand">
+        <svg class="logo" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <h1>MNPLSI</h1>
+      </div>
+      <div class="navbar-badges">
+        <span class="badge">Apache Kafka</span>
+        <span class="badge">Spark MLlib</span>
+        <span class="badge">Airflow</span>
+        <span class="badge">Docker</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero">
+      <h2>Moteur de recommandation en temps réel</h2>
+      <p>Alimenté par Kafka, Spark ALS et Airflow — Architecture Big Data</p>
+    </div>
+
+    <div class="grid">
+      
+      <!-- Metrics Panel -->
+      <section class="card metrics-card">
+        <div class="card-header">
+          <h3>📊 Métriques du modèle</h3>
+          <p class="subtitle">ALS (Alternating Least Squares)</p>
+        </div>
+        <div class="card-body">
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-value">2.29</div>
+              <div class="metric-label">RMSE Validation</div>
+              <div class="metric-info">Train/Val/Test: 80/10/10</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-value">2.34</div>
+              <div class="metric-label">RMSE Test</div>
+              <div class="metric-info">Performance finale</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-value">6,910</div>
+              <div class="metric-label">Avis traités</div>
+              <div class="metric-info">Après nettoyage</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-value">∞</div>
+              <div class="metric-label">Scalabilité</div>
+              <div class="metric-info">Pipeline temps réel</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search & Recommendations -->
+      <section class="card input-card">
+        <div class="card-header">
+          <h3>🔍 Obtenir recommandations</h3>
+          <p class="subtitle">Personnalisées par utilisateur</p>
+        </div>
+
+        <div class="card-body">
+          <div class="search-box">
+            <input 
+              id="userId" 
+              type="text" 
+              placeholder="Saisir ID utilisateur (ex: A3SGXH7AUHU8GW)" 
+              class="search-input"
+              value="A3SGXH7AUHU8GW"
+            />
+            <button id="getRecommendations" class="btn btn-primary">
+              <span>🚀 Recommander</span>
+            </button>
+          </div>
+
+          <div class="button-group">
+            <button id="randomUser" class="btn btn-secondary">
+              <span>🎲 Utilisateur aléatoire</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Display -->
+      <section id="resultCard" class="card result-card" hidden>
+        <div class="card-header">
+          <h3>📋 Résultats</h3>
+          <span id="displayUserId" class="user-badge">—</span>
+        </div>
+
+        <div class="card-body">
+          
+
+          <div id="userInfo" class="user-profile"></div>
+          <div id="statusBadge" class="status-indicator"></div>
+
+          <div class="recommendations-list">
+            <h4>Top recommandations</h4>
+            <ul id="recommendationsList" class="list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top Products -->
+      <section class="card top-card">
+        <div class="card-header">
+          <h3>🏆 Produits populaires</h3>
+          <p class="subtitle">Top 20 du dataset</p>
+        </div>
+
+        <div class="card-body">
+          <button id="getTop" class="btn btn-secondary full-width">
+            <span>📈 Charger les top produits</span>
+          </button>
+
+          <ul id="topList" class="list" hidden></ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>MNPLSI 2025-2026 — Projet Master LSI</p>
+      <p class="footer-meta">Big Data & Streaming — Recommandation temps réel</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

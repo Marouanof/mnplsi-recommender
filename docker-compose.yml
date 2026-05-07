@@ -1,0 +1,152 @@
+services:
+  # ========== KAFKA ==========
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # ========== SPARK ==========
+  spark-master:
+    image: apache/spark:3.5.0
+    hostname: spark-master
+    container_name: spark-master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      SPARK_MODE: master
+      SPARK_MASTER_HOST: spark-master
+    volumes:
+      - ./spark_jobs:/opt/spark/work-dir
+      - ./data:/opt/spark/data
+    command: bash -c "/opt/spark/sbin/start-master.sh && tail -f /dev/null"
+
+  spark-worker:
+    image: apache/spark:3.5.0
+    hostname: spark-worker
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 1G
+      SPARK_WORKER_CORES: 1
+    volumes:
+      - ./spark_jobs:/opt/spark/work-dir
+      - ./data:/opt/spark/data
+    command: bash -c "/opt/spark/sbin/start-worker.sh spark://spark-master:7077 && tail -f /dev/null"
+
+  # ========== POSTGRES ==========
+  postgres:
+    image: postgres:13
+    hostname: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+
+  # ========== AIRFLOW ==========
+  airflow-init:
+    build: ./airflow
+    container_name: airflow-init
+    entrypoint: /bin/bash
+    command: -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com"
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    volumes:
+      - ./airflow_dags:/opt/airflow/dags
+      - ./spark_jobs:/opt/spark/work-dir
+      - ./data:/opt/spark/data
+    depends_on:
+      - postgres
+
+  airflow-webserver:
+    build: ./airflow
+    container_name: airflow-webserver
+    command: airflow webserver
+    ports:
+      - "8081:8080"
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    volumes:
+      - ./airflow_dags:/opt/airflow/dags
+      - ./spark_jobs:/opt/spark/work-dir
+      - ./data:/opt/spark/data
+    depends_on:
+      - postgres
+
+  airflow-scheduler:
+    build: ./airflow
+    container_name: airflow-scheduler
+    command: airflow scheduler
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    volumes:
+      - ./airflow_dags:/opt/airflow/dags
+      - ./spark_jobs:/opt/spark/work-dir
+      - ./data:/opt/spark/data
+    depends_on:
+      - postgres
+
+  # ========== PRODUCTEUR KAFKA ==========
+  kafka-producer:
+    build: ./kafka_producer
+    container_name: kafka-producer
+    depends_on:
+      - kafka
+    volumes:
+      - ./data:/app/data
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["sh", "-c", "sleep 15 && python /app/kafka_producer.py"]
+    restart: "no"
+
+  # ========== API ==========
+  api:
+    build: ./api
+    container_name: api
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kafka
+      - spark-master
+    volumes:
+      - ./data:/app/data
+      - ./spark_jobs:/app/spark_jobs
+
+  # ========== INTERFACE WEB ==========
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    ports:
+      - "80:80"
+    depends_on:
+      - api
