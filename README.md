@@ -110,7 +110,7 @@ Frontend Web UI
 
 ```bash
 # 1. Cloner le repository
-git clone https://github.com/Marouanof/mnplsi_recommender.git
+git clone https://github.com/Marouanof/mnplsi-recommender.git
 cd mnplsi_recommender
 
 # 2. Placer le dataset
