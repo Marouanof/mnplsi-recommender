@@ -1,6 +1,6 @@
 # MNPLSI — Moteur de recommandation temps réel
 
-> Système de recommandation de produits basé sur Apache Kafka, Spark MLlib (ALS) et Airflow. Projet pédagogique Master LSI 2025-2026.
+> Système de recommandation de produits basé sur Apache Kafka, Spark MLlib (ALS) et Airflow. Projet academique LSI 2025-2026.
 
 ## 📋 Table des matières
 
