@@ -110,7 +110,7 @@ Frontend Web UI
 
 ```bash
 # 1. Cloner le repository
-git clone https://github.com/<user>/mnplsi_recommender.git
+git clone https://github.com/Marouanof/mnplsi_recommender.git
 cd mnplsi_recommender
 
 # 2. Placer le dataset
@@ -137,7 +137,7 @@ docker-compose up --build
 | Service           | URL/Port                    | Accès                        |
 | :---------------- | :-------------------------- | :--------------------------- |
 | Frontend (Webapp) | http://localhost            | UI démonstration             |
-| API REST          | http://localhost:5000       | Docs: /docs (FastAPI)        |
+| API REST          | http://localhost:5000       | Docs: /docs (Flask)        |
 | Airflow UI        | http://localhost:8081       | DAGs et exécutions           |
 | Spark Master      | http://localhost:8080       | État cluster Spark           |
 | Kafka Broker      | localhost:9092              | Interne (Docker)             |
@@ -422,116 +422,7 @@ curl http://localhost:5000/recommendations/top
 3. Vérifier les logs dans l'interface
 4. Redémarrer scheduler : `docker restart airflow-scheduler`
 
-## À ignorer avant GitHub
 
-**Créer un `.gitignore` à la racine** :
-
-```gitignore
-# Virtual environments
-venv/
-env/
-ENV/
-.venv
-
-# Données brutes (larges fichiers)
-data/*.csv
-data/checkpoint/
-*.joblib
-*.pkl
-*.parquet
-
-# Cache & temporary
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-.pytest_cache/
-.coverage
-htmlcov/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Docker
-.dockerignore
-docker-compose.override.yml
-
-# Logs
-*.log
-logs/
-airflow/logs/
-*.txt
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Sensitive data
-.env
-.env.local
-*.secrets
-credentials.json
-config.local.yml
-
-# Build artifacts
-dist/
-build/
-*.egg
-
-# Node modules (si frontend avec npm)
-node_modules/
-npm-debug.log
-
-# Spark
-spark-warehouse/
-metastore_db/
-
-# Airflow
-airflow/airflow.cfg
-airflow/airflow.db
-
-# Compiled Python
-*.cpython-*.pyc
-
-# IDE settings
-.vscode/settings.json
-.idea/workspace.xml
-```
-
-**Commandes avant commit** :
-
-```bash
-# Vérifier les fichiers à ignorer
-git status
-
-# Ajouter .gitignore
-git add .gitignore
-
-# Nettoyer les fichiers déjà trackés par erreur
-git rm --cached data/*.csv
-git rm --cached venv/ -r
-git commit -m "Add .gitignore and clean tracked artifacts"
-```
-
-### Fichiers critiques à IGNORER absolument
-
-| Fichier/Dossier             | Raison                              |
-| :-------------------------- | :---------------------------------- |
-| `data/*.csv`                | Trop volumineux (> 500 MB)          |
-| `data/checkpoint/`          | Checkpoints Spark (temporaires)     |
-| `*.joblib`, `*.pkl`         | Modèles sérialisés (> 50 MB)       |
-| `venv/`, `env/`             | Environments Python (recréer avec pip) |
-| `__pycache__/`, `.pyc`      | Cache Python compilé                |
-| `.env`, `credentials.json`  | Secrets (DB passwords, API keys)    |
-| `airflow/logs/`             | Logs Airflow (énormes)              |
-| `.vscode/`, `.idea/`        | Config IDE personnelle              |
 
 ## Contribution
 
